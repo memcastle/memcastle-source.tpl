@@ -1,0 +1,7 @@
+[answers]
+module_name = "jira"
+module_path = "modules/jira"
+
+[expect]
+files = ["modules/jira/memcastle-source.toml", "modules/jira/src/lib.rs", "modules/jira/wit/memcastle-source.wit"]
+absent = ["memcastle-source.toml"]

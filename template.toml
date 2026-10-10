@@ -1,0 +1,32 @@
+name = "memcastle-source"
+description = "A MemCastle source module implementing the versioned WASM component contract"
+strict = true
+
+[questions.module_name]
+type = "string"
+prompt = "Stable source module ID"
+pattern = "^[a-z0-9]+(-[a-z0-9]+)*$"
+message = "use lowercase words, numbers and hyphens"
+
+[questions.module_description]
+type = "string"
+prompt = "What does this source read?"
+default = "Text files from a selected directory"
+
+[questions.module_path]
+type = "string"
+prompt = "Directory for the source module (relative to this project)"
+default = "."
+
+[questions.version]
+type = "string"
+prompt = "Module version"
+default = "0.1.0"
+
+[questions.memcastle]
+type = "string"
+prompt = "Supported MemCastle versions"
+default = ">=0.4, <0.6"
+
+[computed]
+crate_name = "{{ module_name | replace('-', '_') }}"
