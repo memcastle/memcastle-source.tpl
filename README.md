@@ -10,3 +10,4 @@ git tpl init https://github.com/memcastle/memcastle-source.tpl my-source --init 
 
 The module is inert until its containing plugin is installed and the source is enabled.
 The WIT contract is the version shipped with MemCastle 0.4; update it deliberately when the host contract changes.
+Run `memcastle source test my-source` against the generated conformance fixture after installing a compatible Core CLI.
