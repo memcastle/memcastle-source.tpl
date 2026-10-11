@@ -26,5 +26,8 @@ jobs:
       - name: Build a standalone source component
         run: |
           "$RUNNER_TEMP/git-tpl" render . -o "$RUNNER_TEMP/standalone-source" --answer module_name=standalone-source --defaults
-          cargo build --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --target wasm32-wasip2 --release
+          cargo generate-lockfile --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml"
+          cargo fmt --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --all -- --check
+          cargo clippy --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --locked --target wasm32-wasip2 -- -D warnings
+          cargo build --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --locked --target wasm32-wasip2 --release
           test -f "$RUNNER_TEMP/standalone-source/target/wasm32-wasip2/release/standalone_source.wasm"
