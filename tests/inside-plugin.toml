@@ -5,3 +5,6 @@ module_path = "modules/jira"
 [expect]
 files = ["modules/jira/memcastle-source.toml", "modules/jira/src/lib.rs", "modules/jira/wit/memcastle-source.wit"]
 absent = ["memcastle-source.toml"]
+
+[expect.contains]
+"modules/jira/memcastle-source.toml" = ['memcastle = ">=0.5, <0.6"']

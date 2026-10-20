@@ -5,4 +5,4 @@ module_name = "files"
 files = ["memcastle-source.toml", "Cargo.toml", "wit/memcastle-source.wit", "src/lib.rs", "fixtures/text-files/case.json", "fixtures/text-files/tree/a.txt"]
 
 [expect.contains]
-"memcastle-source.toml" = ['name = "files"', 'contract = "0.4.0"']
+"memcastle-source.toml" = ['name = "files"', 'contract = "0.4.0"', 'memcastle = ">=0.5, <0.6"']
