@@ -10,24 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.100.0
         with:
-          targets: wasm32-wasip2
+          targets: wasm32-wasip3
+          components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
-      - name: Install released GitTPL 0.14
+      - uses: jdx/mise-action@v5
+        with:
+          install: false
+      - uses: noirbizarre/git-tpl@main
+        with:
+          version: 0.14.3
+      - uses: memcastle/memcastle@main
+        id: core
+        with:
+          version: development
+      - name: Build, validate and execute standalone and nested components
         env:
-          GH_TOKEN: ${{ github.token }}
+          TEMPLATE_ROOT: ${{ github.workspace }}
         run: |
-          gh release download 0.14.0 --repo noirbizarre/git-tpl --pattern 'git-tpl_0.14.0_linux-amd64.tar.gz' --dir "$RUNNER_TEMP"
-          tar -xzf "$RUNNER_TEMP/git-tpl_0.14.0_linux-amd64.tar.gz" -C "$RUNNER_TEMP" ./git-tpl
-      - name: Check standalone and nested module rendering
-        run: |
-          "$RUNNER_TEMP/git-tpl" test
-      - name: Build a standalone source component
-        run: |
-          "$RUNNER_TEMP/git-tpl" render . -o "$RUNNER_TEMP/standalone-source" --answer module_name=standalone-source --defaults
-          cargo generate-lockfile --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml"
-          cargo fmt --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --all -- --check
-          cargo clippy --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --locked --target wasm32-wasip2 -- -D warnings
-          cargo build --manifest-path "$RUNNER_TEMP/standalone-source/Cargo.toml" --locked --target wasm32-wasip2 --release
-          test -f "$RUNNER_TEMP/standalone-source/target/wasm32-wasip2/release/standalone_source.wasm"
+          set -euo pipefail
+          result="$(mise exec cargo:wasm-tools@1.263.0 -- git tpl test --json)"
+          jq . <<< "$result"
+          jq -e '.summary.failed == 0' <<< "$result" >/dev/null
+          echo 'Tested Core ${{ steps.core.outputs.core_sha }}' >> "$GITHUB_STEP_SUMMARY"

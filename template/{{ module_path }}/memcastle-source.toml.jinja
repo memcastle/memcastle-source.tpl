@@ -6,7 +6,7 @@ version = "{{ version }}"
 description = "{{ module_description }}"
 
 [compatibility]
-contract = "0.4.0"
+contract = "0.5.0"
 memcastle = "{{ memcastle }}"
 
 [capabilities]
@@ -17,8 +17,8 @@ incremental = true
 read = ["locator"]
 
 [build]
-command = ["cargo", "build", "--release", "--target", "wasm32-wasip2", "--target-dir", "target"]
-output = "target/wasm32-wasip2/release/{{ crate_name }}.wasm"
+command = ["cargo", "build", "--locked", "--release", "--target", "wasm32-wasip3", "--target-dir", "target"]
+output = "target/wasm32-wasip3/release/{{ crate_name }}.wasm"
 
 [test]
 fixtures = "fixtures"
