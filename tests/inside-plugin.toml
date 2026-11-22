@@ -7,4 +7,7 @@ files = ["modules/jira/memcastle-source.toml", "modules/jira/src/lib.rs", "modul
 absent = ["memcastle-source.toml"]
 
 [expect.contains]
-"modules/jira/memcastle-source.toml" = ['memcastle = ">=0.5, <0.6"']
+"modules/jira/memcastle-source.toml" = ['memcastle = ">=0.5, <0.6"', 'contract = "0.5.0"', 'wasm32-wasip3']
+
+[commands]
+rendered = ["python3 {{ env.TEMPLATE_ROOT }}/tests/scripts/check_component.py modules/jira"]
